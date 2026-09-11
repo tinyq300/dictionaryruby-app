@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнительная лексикография феминитивов в русском и белорусском языках</title>
+  
+  <!-- Google Fonts: Inter & PT Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between min-h-[3.75rem] sm:min-h-[4.25rem] py-2 sm:py-2.5 gap-2 sm:gap-4 flex-wrap 2xl:flex-nowrap">
+        
+        <!-- Logo & Title (Top-Left) -->
+        <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer flex-shrink-0 order-1" id="logoBtn">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md font-bold text-base sm:text-lg flex-shrink-0">
+            📖
+          </div>
+          <div class="flex flex-col justify-center min-w-0">
+            <h1 class="text-sm sm:text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-snug m-0 p-0 whitespace-nowrap">
+              <span class="sm:hidden" data-i18n="appTitleShort">Словарь</span>
+              <span class="hidden sm:inline" data-i18n="appTitle">Словарь феминитивов</span>
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 hidden lg:block leading-none mt-1 whitespace-nowrap" data-i18n="appSubtitle">
+              Сравнительная лексикография феминитивов в русском и белорусском языках
+            </p>
+          </div>
+        </div>
+
+        <!-- Dictionary Switcher (Central Tabs: Russian Mode & Belarusian Mode) -->
+        <div class="order-3 2xl:order-2 w-full 2xl:w-auto flex justify-center pb-1 2xl:pb-0">
+          <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-medium w-full sm:w-auto justify-center">
+            <button id="dictTab1" class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg transition-all font-semibold flex items-center justify-center gap-1.5 text-sky-700 dark:text-sky-300 bg-white dark:bg-slate-700 shadow-sm whitespace-nowrap" title="Русский язык (37)">
+              <span>🇷🇺</span>
+              <span class="sm:hidden whitespace-nowrap" id="dictTab1ShortLabel">Русский (37)</span>
+              <span class="hidden sm:inline whitespace-nowrap" id="dictTab1Label">Русский язык (37)</span>
+            </button>
+            <button id="dictTab2" class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5 whitespace-nowrap" title="Белорусский язык (29)">
+              <span>🇧🇾</span>
+              <span class="sm:hidden whitespace-nowrap" id="dictTab2ShortLabel">Белорусский (29)</span>
+              <span class="hidden sm:inline whitespace-nowrap" id="dictTab2Label">Белорусский язык (29)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Utility Controls (Favorites, Theme, Manage data, Admin) -->
+        <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 2xl:order-3">
+          
+          <!-- Favorites Toggle Button -->
+          <button id="toggleFavoritesBtn" class="relative p-1.5 sm:p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Избранное" data-i18n-title="favoritesOnly">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span id="favCountBadge" class="hidden absolute -top-1 -right-1 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full items-center justify-center">0</span>
+          </button>
+
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" class="p-1.5 sm:p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Сменить тему" data-i18n-title="themeToggleDark">
+            <span id="themeIcon">🌙</span>
+          </button>
+
+          <!-- Admin Controls Area -->
+          <!-- 1. Guest Login Button (shown when not logged in) -->
+          <button id="openLoginModalBtn" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all shadow-sm" title="Вход администратора" data-i18n-title="adminLoginBtn">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <span class="whitespace-nowrap" data-i18n="adminLoginBtn">Вход</span>
+          </button>
+
+          <!-- 2. Admin Active Controls (shown when logged in) -->
+          <div id="adminActiveControls" class="hidden items-center gap-1 sm:gap-1.5">
+            <div id="adminBadgeIndicator" class="admin-badge-indicator flex items-center gap-1 px-2 py-1 rounded-lg text-amber-700 dark:text-amber-300 text-xs font-bold cursor-pointer hover:bg-amber-100/60 dark:hover:bg-amber-900/40 transition-colors" title="Сменить пароль администратора">
+              <span>🛡️</span>
+              <span class="hidden sm:inline" data-i18n="adminBadge">Администратор</span>
+            </div>
+
+            <button id="adminAddNewWordBtn" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold shadow-sm transition-colors whitespace-nowrap" title="Добавить новое слово" data-i18n-title="addNewWordBtn">
+              <span data-i18n="addNewWordBtn">+ Добавить слово</span>
+            </button>
+
+            <button id="openDataModalBtn" class="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors whitespace-nowrap" title="Управление базой" data-i18n-title="manageDataBtn">
+              <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+              <span class="hidden md:inline" data-i18n="manageDataBtn">База данных</span>
+            </button>
+
+            <button id="openChangePasswordModalBtn" class="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors whitespace-nowrap" title="Сменить пароль" data-i18n-title="changePasswordBtn">
+              <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+              <span class="hidden lg:inline" data-i18n="changePasswordBtn">Пароль</span>
+            </button>
+
+            <button id="adminLogoutBtn" class="flex items-center gap-1 p-1.5 sm:px-2 sm:py-1.5 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-medium transition-colors whitespace-nowrap" title="Выйти" data-i18n-title="adminLogoutBtn">
+              <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+              <span class="hidden sm:inline" data-i18n="adminLogoutBtn">Выйти</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Search Section -->
+  <section class="py-6 sm:py-8 bg-gradient-to-b from-sky-50/70 via-slate-50 to-slate-50 dark:from-slate-800/40 dark:via-slate-900 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
+    
+    <!-- Scholarly Subtitle Banner (Spacious and Responsive) -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 mb-6 text-center">
+      <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-2" data-i18n="heroTitle">
+        Сравнительная лексикография феминитивов
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed" data-i18n="heroSubtitle">
+        Электронный словарь феминитивов в русском (37 единиц) и белорусском (29 единиц) языках
+      </p>
+    </div>
+
+    <!-- Thematic Author / Corpus Showcase Banner (Background art, emblem & floating letters) -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 mb-5">
+      <div id="authorShowcase" class="author-showcase p-4 sm:p-6 text-white min-h-[175px] flex items-center">
+        <!-- Dynamic Background Art (Russian / Belarusian) -->
+        <div id="authorBgNekrasov" class="author-showcase-bg active" style="background-image: url('assets/images/ru_dict_banner.jpg');"></div>
+        <div id="authorBgKolas" class="author-showcase-bg" style="background-image: url('assets/images/be_dict_banner.jpg');"></div>
+        <!-- Gradient Overlay -->
+        <div class="author-showcase-overlay"></div>
+
+        <!-- Floating Letters (Artistically floating in background) -->
+        <div id="floatingLettersContainer" class="absolute inset-0 overflow-hidden pointer-events-none z-[2]">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <!-- Content Overlay -->
+        <div class="author-showcase-content w-full flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+          <!-- Emblem Medallion -->
+          <div class="relative flex-shrink-0">
+            <img 
+              id="authorEmblemImg" 
+              src="assets/images/ru_dict_emblem.jpg" 
+              alt="Корпус" 
+              class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 border-amber-400/60 shadow-xl ring-4 ring-amber-500/20"
+            >
+            <span id="authorThemeIcon" class="absolute -bottom-2 -right-2 text-base sm:text-lg bg-slate-900/90 border border-slate-700 p-1 rounded-lg shadow-md">
+              🇷🇺
+            </span>
+          </div>
+
+          <!-- Thematic Text & Research Quote -->
+          <div class="flex-1 text-center sm:text-left min-w-0">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+              <h3 id="authorShowcaseTitle" class="font-serif text-lg sm:text-2xl font-bold tracking-tight text-white">
+                Русский язык (37 феминитивов)
+              </h3>
+              <span id="authorShowcaseYear" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                Корпус русского языка
+              </span>
+            </div>
+
+            <p id="authorShowcaseWorks" class="text-xs sm:text-sm font-semibold text-sky-200/90 mb-2">
+              Сравнительная лексикография феминитивов
+            </p>
+
+            <blockquote id="authorShowcaseQuote" class="text-xs sm:text-sm italic text-slate-200/90 font-serif border-t border-white/10 pt-2 leading-relaxed">
+              «Исследование словообразовательных моделей (-к-, -ниц-, -иц-, -ш-, -ин-, -есс-) и стилистической дифференциации феминитивов в русском языке.»
+            </blockquote>
+
+            <div id="authorShowcaseTags" class="flex flex-wrap gap-1.5 mt-2.5 justify-center sm:justify-start text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-white/10 text-slate-200 backdrop-blur-sm border border-white/10">🇷🇺 Русский корпус</span>
+              <span class="px-2 py-0.5 rounded bg-white/10 text-slate-200 backdrop-blur-sm border border-white/10">📚 37 феминитивов</span>
+              <span class="px-2 py-0.5 rounded bg-white/10 text-slate-200 backdrop-blur-sm border border-white/10">✨ Нормативные и неологизмы</span>
+              <span class="px-2 py-0.5 rounded bg-white/10 text-slate-200 backdrop-blur-sm border border-white/10">🔍 Словообразование</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <!-- Dictionary Context Badge -->
+      <div class="flex items-center justify-between mb-3 text-xs sm:text-sm flex-wrap gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300" id="currentDictBadge">
+            1: Русский язык (37)
+          </span>
+          <span class="text-slate-400 dark:text-slate-500" id="totalWordsBadge">37 единиц</span>
+        </div>
+        <button id="mobileManageBtn" class="sm:hidden text-xs text-sky-600 dark:text-sky-400 font-medium underline" data-i18n="manageDataBtn">
+          База данных
+        </button>
+      </div>
+
+      <!-- Search Input Container -->
+      <div class="search-container relative flex items-center bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-200">
+        <div class="pl-4 text-slate-400 dark:text-slate-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="w-full min-w-0 py-3.5 pl-3 pr-10 text-base sm:text-lg bg-transparent text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none" 
+          placeholder="Поиск слова, суффикса (-к-, -ниц-, -иц-, -ш-, -ин-), стилистики или модели... ('/')" 
+          data-i18n-placeholder="searchPlaceholder"
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <!-- Clear Search Button -->
+        <button id="clearSearchBtn" class="hidden pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Очистить">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <div class="pr-3 hidden sm:flex items-center">
+          <kbd class="px-2 py-0.5 text-xs text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md bg-slate-50 dark:bg-slate-800">/</kbd>
+        </div>
+      </div>
+
+      <!-- Quick Letters & Search Options Bar -->
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+        
+        <!-- Search Scope Radios -->
+        <div class="flex items-center gap-1 bg-slate-200/70 dark:bg-slate-800 p-1 rounded-lg text-xs overflow-x-auto max-w-full">
+          <button class="scope-btn px-2.5 py-1 rounded-md font-medium transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm whitespace-nowrap" data-scope="all" data-i18n="searchScopeAll">
+            Везде
+          </button>
+          <button class="scope-btn px-2.5 py-1 rounded-md font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap" data-scope="word" data-i18n="searchScopeWord">
+            В словах
+          </button>
+          <button class="scope-btn px-2.5 py-1 rounded-md font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap" data-scope="def" data-i18n="searchScopeDef">
+            В описании и модели
+          </button>
+        </div>
+
+        <!-- Quick Virtual Keys Helper (Russian & Belarusian) -->
+        <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+          <span data-i18n="quickLettersLabel">Спец. символы:</span>
+          <div class="flex gap-1" id="quickLetters">
+            <button class="quick-char-btn px-2 py-0.5 font-bold rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors shadow-xs" data-char="ё">ё</button>
+            <button class="quick-char-btn px-2 py-0.5 font-bold rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors shadow-xs" data-char="ъ">ъ</button>
+            <button class="quick-char-btn px-2 py-0.5 font-bold rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors shadow-xs" data-char="і">і</button>
+            <button class="quick-char-btn px-2 py-0.5 font-bold rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors shadow-xs" data-char="ў">ў</button>
+            <button class="quick-char-btn px-2 py-0.5 font-bold rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors shadow-xs" data-char="’">’</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Alphabet Filter Bar -->
+  <nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xs py-2 sticky top-[80px] sm:top-[88px] lg:top-16 z-30 w-full overflow-hidden">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 overflow-x-auto">
+      <div class="flex items-center gap-1.5 min-w-max pb-1 sm:pb-0" id="alphabetList">
+        <!-- Generated by JavaScript -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    
+    <!-- Meta Bar: Result Count & Active Filters -->
+    <div class="flex items-center justify-between mb-5 flex-wrap gap-2">
+      <div class="flex items-center gap-2">
+        <h2 class="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-300" id="resultsCount">
+          Найдено лексических единиц: 0
+        </h2>
+        <span id="activeFilterBadge" class="hidden text-xs bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 px-2 py-0.5 rounded-md font-medium"></span>
+      </div>
+
+      <!-- Action: Reset filters or Favorites Filter toggle -->
+      <div class="flex items-center gap-3 text-xs">
+        <label class="flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-300 select-none">
+          <input type="checkbox" id="favOnlyCheckbox" class="rounded border-slate-300 text-sky-600 focus:ring-sky-500 w-4 h-4">
+          <span data-i18n="favoritesOnly">Только избранное</span>
+        </label>
+        <button id="resetAllBtn" class="text-sky-600 dark:text-sky-400 hover:underline hidden" data-i18n="resetFilters">
+          Сбросить фильтры
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Container -->
+    <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <!-- Word Cards injected via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl">
+        🔍
+      </div>
+      <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1" data-i18n="noResultsTitle">
+        Слово не найдено
+      </h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-5" data-i18n="noResultsText">
+        Попробуйте изменить запрос (например, ввести суффикс '-к-', часть значения или стилистику).
+      </p>
+      <button id="emptyResetBtn" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors shadow-sm" data-i18n="resetFilters">
+        Сбросить фильтры
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Word Detail Modal -->
+  <div id="wordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="modal-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📖</span>
+          <h3 class="font-bold text-base text-slate-800 dark:text-slate-100" data-i18n="wordDetailTitle">
+            Словарная статья феминитива
+          </h3>
+        </div>
+        <button id="closeModalBtn" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-5" id="modalContent">
+        <!-- Injected by JavaScript -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between">
+        <button id="modalCopyBtn" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          <span data-i18n="copyWord">Скопировать статью</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="modalEditWordBtn" class="admin-only hidden inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors">
+            <span>✏️</span>
+            <span data-i18n="editWordBtn">Редактировать</span>
+          </button>
+          <button id="modalCloseActionBtn" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 transition-colors" data-i18n="closeModal">
+            Закрыть
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Data Management / Import Modal -->
+  <div id="dataModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="modal-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col">
+      
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+        <div>
+          <h3 class="font-bold text-base text-slate-800 dark:text-slate-100" data-i18n="dataModalTitle">
+            Управление базой данных словаря
+          </h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400" id="dataModalCurrentDictName">
+            Словарь 1: Русский язык (37)
+          </p>
+        </div>
+        <button id="closeDataModalBtn" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Tabs for Modal (Add Word, Import JSON, Export JSON) -->
+      <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-100/60 dark:bg-slate-900/50 px-6 pt-2 text-xs font-semibold gap-2">
+        <button id="dataTabAdd" class="admin-only py-2.5 px-3 border-b-2 border-sky-600 text-sky-600 dark:text-sky-400 transition-colors" data-i18n="addNewWordBtn">
+          + Добавить слово
+        </button>
+        <button id="dataTabImport" class="admin-only py-2.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors" data-i18n="importJsonBtn">
+          Импорт JSON
+        </button>
+        <button id="dataTabExport" class="py-2.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors" data-i18n="exportJsonBtn">
+          Экспорт в JSON
+        </button>
+      </div>
+
+      <!-- Body Content -->
+      <div class="p-6 overflow-y-auto max-h-[60vh]">
+        
+        <!-- Tab 1: Add Word Form -->
+        <form id="addWordForm" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="wordInputLabel">
+                Слово (заголовок)*
+              </label>
+              <input type="text" id="newWordTitle" required class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="напр. авторка">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="stressInputLabel">
+                Слово с ударением (необязательно)
+              </label>
+              <input type="text" id="newWordStressed" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="напр. а́вторка">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="posInputLabel">
+                Часть речи / Категория
+              </label>
+              <select id="newWordPos" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="noun">существительное (феминитив)</option>
+                <option value="verb">глагол</option>
+                <option value="adj">субстантиват / прилагательное</option>
+                <option value="adv">наречие</option>
+                <option value="other">другое</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Грамматический род (для сущ.)
+              </label>
+              <input type="text" id="newWordGender" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="ж.р. / м.р. / с.р.">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="translationInputLabel">
+              Значение и толкование*
+            </label>
+            <textarea id="newWordTranslation" required rows="3" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Значение или толкование слова..."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="examplesInputLabel">
+              Примеры из текста (по одному в строке):
+            </label>
+            <textarea id="newWordExamples" rows="2" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Цитата или пример употребления..."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="synonymsInputLabel">
+              Варианты / Близкие номинации (через запятую):
+            </label>
+            <input type="text" id="newWordSynonyms" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="автор, писательница">
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="submit" class="px-5 py-2 text-sm font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors shadow-sm" data-i18n="saveWordBtn">
+              Сохранить слово
+            </button>
+          </div>
+        </form>
+
+        <!-- Tab 2: Import JSON -->
+        <div id="importPanel" class="hidden space-y-4">
+          <p class="text-xs text-slate-600 dark:text-slate-400">
+            Вставьте JSON-массив словарных статей для текущего словаря. Пример формата:
+            <code class="block mt-1 p-2 bg-slate-100 dark:bg-slate-900 rounded text-[11px] font-mono text-slate-800 dark:text-slate-200 select-all">
+[
+  {
+    "word": "АВТОРКА",
+    "stressed": "А́ВТОРКА",
+    "pos": "noun",
+    "meaning": "Женщина-автор.",
+    "grammar": "существительное, ж.р., 1-е скл.",
+    "derivation": "автор + суф. -к-"
+  }
+]
+            </code>
+          </p>
+          <textarea id="importJsonTextarea" rows="8" class="w-full font-mono text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Вставьте сюда JSON-массив словарных статей..."></textarea>
+          <div class="flex items-center justify-between">
+            <button id="applyImportBtn" class="px-5 py-2 text-sm font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors" data-i18n="applyImportBtn">
+              Применить импорт
+            </button>
+            <span id="importStatusMsg" class="text-xs font-semibold"></span>
+          </div>
+        </div>
+
+        <!-- Tab 3: Export JSON -->
+        <div id="exportPanel" class="hidden space-y-4">
+          <p class="text-xs text-slate-600 dark:text-slate-400">
+            Здесь вы можете скопировать или скачать полную базу активного словаря в формате JSON:
+          </p>
+          <textarea id="exportJsonTextarea" readonly rows="9" class="w-full font-mono text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none select-all"></textarea>
+          <div class="flex flex-wrap gap-2.5 items-center">
+            <button id="copyExportBtn" class="px-4 py-2 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors">
+              Скопировать в буфер
+            </button>
+            <button id="downloadExportBtn" class="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+              Скачать .json
+            </button>
+            <button id="downloadDictionariesJsBtn" class="admin-only px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-sm" data-i18n="exportJsBtn">
+              Скачать dictionaries.js (для GitHub)
+            </button>
+            <button id="resetDatabaseBtn" class="admin-only ml-auto px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors" data-i18n="resetCustomWordsBtn">
+              Сбросить к исходным
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div id="adminLoginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="modal-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🛡️</span>
+          <div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white" data-i18n="adminModalTitle">
+              Вход администратора
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="adminModalDesc">
+              Доступ к редактированию словаря
+            </p>
+          </div>
+        </div>
+        <button id="closeLoginModalBtn" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="adminLoginForm" class="p-6 space-y-4">
+        <div id="adminLoginErrorBox" class="hidden p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 rounded-xl text-xs text-rose-700 dark:text-rose-300 font-medium">
+          Неверный логин или пароль!
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="adminUsernameLabel">
+            Логин администратора:
+          </label>
+          <input type="text" id="adminUsernameInput" required placeholder="admin" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="adminPasswordLabel">
+            Пароль:
+          </label>
+          <div class="relative">
+            <input type="password" id="adminPasswordInput" required class="w-full text-sm px-3 py-2 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="••••••••">
+            <button type="button" id="togglePasswordVisibilityBtn" class="absolute right-2 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="adminRememberMeCheckbox" checked class="rounded border-slate-300 dark:border-slate-600 text-sky-600 focus:ring-sky-500">
+          <label for="adminRememberMeCheckbox" class="text-xs text-slate-600 dark:text-slate-400 select-none cursor-pointer" data-i18n="adminRememberMe">
+            Запомнить на этом устройстве
+          </label>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+          <button type="button" id="cancelLoginBtn" class="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-i18n="closeModal">
+            Отмена
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors shadow-sm" data-i18n="adminSubmitBtn">
+            Войти
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password Modal (Admin Only) -->
+  <div id="changePasswordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="modal-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🔑</span>
+          <div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white" data-i18n="changePasswordTitle">
+              Изменение пароля администратора
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="changePasswordDesc">
+              Введите текущий пароль и установите новый пароль администратора.
+            </p>
+          </div>
+        </div>
+        <button id="closeChangePasswordModalBtn" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="changePasswordForm" class="p-6 space-y-4">
+        <div id="changePasswordErrorBox" class="hidden p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 rounded-xl text-xs text-rose-700 dark:text-rose-300 font-medium">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="currentPasswordLabel">
+            Текущий пароль:
+          </label>
+          <div class="relative">
+            <input type="password" id="currentPasswordInput" required class="w-full text-sm px-3 py-2 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="••••••••">
+            <button type="button" class="pwd-toggle-btn absolute right-2 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1" data-target="currentPasswordInput">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="newPasswordLabel">
+            Новый пароль (мин. 5 символов):
+          </label>
+          <div class="relative">
+            <input type="password" id="newPasswordInput" required minlength="5" class="w-full text-sm px-3 py-2 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="••••••••">
+            <button type="button" class="pwd-toggle-btn absolute right-2 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1" data-target="newPasswordInput">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="confirmPasswordLabel">
+            Подтверждение нового пароля:
+          </label>
+          <div class="relative">
+            <input type="password" id="confirmPasswordInput" required minlength="5" class="w-full text-sm px-3 py-2 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="••••••••">
+            <button type="button" class="pwd-toggle-btn absolute right-2 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1" data-target="confirmPasswordInput">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+          <button type="button" id="cancelChangePasswordBtn" class="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-i18n="closeModal">
+            Отмена
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold rounded-lg bg-amber-600 hover:bg-amber-700 text-white transition-colors shadow-sm" data-i18n="savePasswordBtn">
+            Сохранить новый пароль
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Word Modal -->
+  <div id="editWordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="modal-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✏️</span>
+          <div>
+            <h3 id="editWordModalTitle" class="font-bold text-base text-slate-900 dark:text-white" data-i18n="editWordModalTitle">
+              Редактирование словарной статьи
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400" id="editWordDictName">
+              Русский язык (37)
+            </p>
+          </div>
+        </div>
+        <button id="closeEditWordModalBtn" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="editWordForm" class="p-6 space-y-4 overflow-y-auto">
+        <input type="hidden" id="editWordId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="wordInputLabel">
+              Слово (заголовок)*:
+            </label>
+            <input type="text" id="editWordTitle" required class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="stressInputLabel">
+              Слово с ударением:
+            </label>
+            <input type="text" id="editWordStressed" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="workHeader">
+              Языковой корпус / Источник*:
+            </label>
+            <input type="text" id="editWordWork" required class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Русский язык или Беларуская мова">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              Суффикс / тип:
+            </label>
+            <input type="text" id="editWordSuffix" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="напр. -к-, -ниц-, непроизводное">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="grammarHeader">
+            Грамматическая характеристика*:
+          </label>
+          <input type="text" id="editWordGrammar" required class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="существительное, одушевлённое, женский род, 1-е склонение">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="meaningHeader">
+            Значение*:
+          </label>
+          <textarea id="editWordMeaning" required rows="3" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Толкование значения слова..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="derivationHeader">
+              Словообразовательная модель:
+            </label>
+            <input type="text" id="editWordDerivation" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="корень + суф. -к-">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="tagsHeader">
+              Теги (через запятую):
+            </label>
+            <input type="text" id="editWordTags" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="суффикс -к-, профессия, неологизм">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="stylisticsHeader">
+            Стилистическая характеристика:
+          </label>
+          <textarea id="editWordStylistics" rows="2" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="нейтральное, разговорное, сниженное, историзм и т.д."></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+          <button type="button" id="cancelEditWordBtn" class="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-i18n="closeModal">
+            Отмена
+          </button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors shadow-sm" data-i18n="saveChangesBtn">
+            Сохранить изменения
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-notice">
+    <span>📋</span>
+    <span id="toastText">Скопировано в буфер обмена!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-16 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p data-i18n="footerInfo">Сравнительная лексикография феминитивов в русском и белорусском языках.</p>
+      <p class="text-slate-400 dark:text-slate-500">
+        Клавиши: <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">/</kbd> для поиска &bull; <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">Esc</kbd> для закрытия
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data/dictionaries.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
